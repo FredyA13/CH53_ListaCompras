@@ -8,7 +8,7 @@
 // 6. Almacenar la informacion en el almacenamiento local del navegador //COMPLETADO
 // 7. Mostrar la informacion almacenada cuando se abra la pagina //COMPLETADO
 
-//Variables de acceso al elemento del nombre del producto
+//Variable de acceso al elemento del nombre del producto
 const txtName = document.getElementById("Name");
 //Variable de acceso al elemento de la cantidad que queremos del producto
 const txtNumber = document.getElementById("Number");
@@ -28,6 +28,9 @@ const contadorProductos = document.getElementById("contadorProductos");
 const productosTotal = document.getElementById("productosTotal");
 //Variable de acceso al elemento del precio total
 const precioTotal = document.getElementById("precioTotal");
+
+//Variable de acceso al elemento del boton limpiar todo
+const btnClear = document.getElementById("btnClear");
 
 //Numeracion de la primera columna de la tabla
 let cont = 0;
@@ -204,4 +207,37 @@ window.addEventListener("load", function(event){
     productosTotal.innerText = totalEnProductos;
     contadorProductos.innerText = cont;
 
-})//window.addEventListener
+});//window.addEventListener
+
+//Agregar la funcionalidad de limpiar todo
+//Resumen
+//Tabla
+//campos
+//alerta
+//localStorage
+btnClear.addEventListener("click", function(event){
+
+    event.preventDefault();
+
+    //Resumen
+    contadorProductos.innerText = "0";
+    productosTotal.innerText = "0";
+    precioTotal.innerText = "$ 0.00";
+
+    //Tabla
+    cuerpoTabla.innerText="";
+
+    //Campos de texto
+    txtName.value="";
+    txtNumber.value="";
+
+    //Alertas
+    alertValidacionesTexto.innerHTML="";
+    alertValidaciones.style.display="none";
+    txtName.style.border="";
+    txtNumber.style.border="";
+
+    //localStorage
+    localStorage.removeItem("datos");
+    localStorage.removeItem("resumen");
+});
