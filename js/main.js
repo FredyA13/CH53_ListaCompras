@@ -225,7 +225,7 @@ btnClear.addEventListener("click", function(event){
     precioTotal.innerText = "$ 0.00";
 
     //Tabla
-    cuerpoTabla.innerText="";
+    cuerpoTabla.innerHTML="";
 
     //Campos de texto
     txtName.value="";
