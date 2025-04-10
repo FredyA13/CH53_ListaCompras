@@ -5,8 +5,8 @@
 // 3. Agregar los elementos en la tabla //COMPLETADO
 // 4. Realizar las operaciones para conocer el total en costo //COMPLETADO
 // 5. Realizar las operaciones para conocer el total en costo //COMPLETADO
-// 6. Almacenar la informacion en el almacenamiento local del navegador
-// 7. Mostrar la informacion almacenada cuando se abra la pagina
+// 6. Almacenar la informacion en el almacenamiento local del navegador //COMPLETADO
+// 7. Mostrar la informacion almacenada cuando se abra la pagina //COMPLETADO
 
 //Variables de acceso al elemento del nombre del producto
 const txtName = document.getElementById("Name");
@@ -35,6 +35,8 @@ let cont = 0;
 let costoTotal = 0;
 //Variable del total de productos
 let totalEnProductos = 0;
+//Variable para almacenar los elementos de la tabla
+let datos = new Array(); //[]
 
 function validarCantidad(){
 
@@ -122,6 +124,20 @@ btnAgregar.addEventListener("click", function(event){
                     <td>${precio}</td>
                    </tr>`;
         
+        //Creamos el objeto "elemento para guardar los datos de la tabla en formato JSON
+        let elemento = {
+                        "cont" : cont,
+                        "nombre" : txtName.value,
+                        "cantidad" : txtNumber.value,
+                        "precio" : precio
+        };
+        
+        //Guardamos el objeto "elemento" en el arreglo "datos"
+        datos.push(elemento);
+
+        //Guardamos los datos de la tabla en el local storage de manera de "string"
+        localStorage.setItem("datos", JSON.stringify(datos));
+        
         //Agregamos los datos de la variable row a la tabla
         cuerpoTabla.insertAdjacentHTML("beforeend", row);
 
@@ -136,6 +152,16 @@ btnAgregar.addEventListener("click", function(event){
         //Usamos la misma variable "cont" para contar los productos
         contadorProductos.innerText = cont;
 
+        //Creamos el objeto del arreglo llamado resumen para guardar los datos del resumen em formato JSON
+        let resumen = {
+            "cont" : cont,
+            "totalEnProductos" : totalEnProductos,
+            "costoTotal" : costoTotal
+        }
+
+        //Guardamos los datos del resumen en el local storage de manera de "string"
+        localStorage.setItem("resumen", JSON.stringify(resumen));
+
         //Con las siguientes dos lineas limpiamos los valores de los datos
         txtName.value = "";
         txtNumber.value = "";
@@ -143,3 +169,39 @@ btnAgregar.addEventListener("click", function(event){
     }//if isValid
 
 });//btnAgregar
+
+
+window.addEventListener("load", function(event){
+
+    event.preventDefault();
+
+    //Recuperamos el localStorage de los datos
+    if(this.localStorage.getItem("datos")!=null){
+        datos = JSON.parse(this.localStorage.getItem("datos"));
+    }//datos != null
+
+    //Mostramos en la tabla los datos guardados
+    datos.forEach((d) => {
+        let row = `<tr>
+                    <td>${d.cont}</td>
+                    <td>${d.nombre}</td>
+                    <td>${d.cantidad}</td>
+                    <td>${d.precio}</td>
+                   </tr>`
+        cuerpoTabla.insertAdjacentHTML("beforeend", row);
+    });
+
+    //Recuperamos el localStorage del y se lo aplicamos al resumen
+    if(this.localStorage.getItem("resumen")!=null){
+        let resumen = JSON.parse(this.localStorage.getItem("resumen"));
+        costoTotal = resumen.costoTotal;
+        totalEnProductos = resumen.totalEnProductos;
+        cont = resumen.cont;
+    }//resumen !=null
+
+    //Mostramos en las secciones los datos guardados de resumen
+    precioTotal.innerText = "$ " + costoTotal.toFixed(2);
+    productosTotal.innerText = totalEnProductos;
+    contadorProductos.innerText = cont;
+
+})//window.addEventListener
